@@ -16,9 +16,12 @@
   },
   "dependencies": {
     "@prisma/client": "^4.13.0",
+    "@sapphire/discord.js-utilities": "^6.1.0",
+    "@sapphire/utilities": "^3.11.1",
     "discord.js": "^14.10.2",
     "discordx": "^11.7.6",
     "dotenv": "^16.0.3",
+    "ts-dedent": "^2.2.0",
     "tslib": "^2.5.0",
     "tslog": "^4.8.2",
     "typedi": "^0.10.0",

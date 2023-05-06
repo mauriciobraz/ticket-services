@@ -10,7 +10,7 @@ class Controller {
 
   @On({ event: 'ready' })
   async onReady(_: ArgsOf<'ready'>, client: Client) {
-    await client.initApplicationCommands();
+    // await client.initApplicationCommands();
 
     this.logger.info(
       'Successfully initialized application commands and started listening for events.'

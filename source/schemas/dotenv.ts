@@ -23,6 +23,11 @@ const DotenvSchema = z.object({
   LOG_LEVEL: LogLevel,
   DISCORD_TOKEN: DiscordToken,
 
+  OWNERS_IDS: z
+    .string()
+    .regex(/^(\d{16,19})(?:\s*,\s*\d{16,19})*$/)
+    .transform((value) => value.split(/[ ,]+/g)),
+
   TICKET_CATEGORY_ID: Snowflake,
   SUPERVISOR_ROLE_ID: Snowflake,
 
@@ -32,6 +37,7 @@ const DotenvSchema = z.object({
 
 export const {
   DISCORD_TOKEN,
+  OWNERS_IDS,
   LOG_LEVEL,
   NODE_ENV,
   SUPERVISOR_ROLE_ID,

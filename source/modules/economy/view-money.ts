@@ -4,12 +4,15 @@ import {
   ChatInputCommandInteraction,
   User,
 } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, Guard, Slash, SlashOption } from 'discordx';
+
+import { OnlyOwners } from '@/guards/OnlyOwners';
 
 @Discord()
 export class Economy {
   constructor(private readonly prisma: PrismaClient) {}
 
+  @Guard(OnlyOwners)
   @Slash({
     name: 'view-money',
     description: 'Check how much money you or someone else has.',

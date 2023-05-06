@@ -4,12 +4,15 @@ import {
   ChatInputCommandInteraction,
   User,
 } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
+
+import { OnlyOwners } from '@/guards/OnlyOwners';
 
 @Discord()
 export class Economy {
   constructor(private readonly prisma: PrismaClient) {}
 
+  @Guard(OnlyOwners)
   @Slash({
     name: 'remove-money',
     description: 'Remove money from a user.',
