@@ -24,3 +24,6 @@
 # logs
 /logs
 *.log
+
+# prisma sqlite
+prisma/data/

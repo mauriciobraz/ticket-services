@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:data/database.sqlite"
+}
+
+model User {
+  id        String @id @unique @default(cuid())
+  discordId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  works           Work[] @relation("WorkUser")
+  worksCompleted  Work[] @relation("WorkWorker")
+  worksSupervised Work[] @relation("WorkSupervisor")
+
+  balanceUSD  Int @default(0)
+  balanceOSRS Int @default(0)
+}
+
+model Work {
+  id String @id @unique @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], name: "WorkUser")
+  userId String
+
+  supervisor   User?   @relation(fields: [supervisorId], references: [id], name: "WorkSupervisor")
+  supervisorId String?
+
+  worker   User?   @relation(fields: [workerId], references: [id], name: "WorkWorker")
+  workerId String?
+
+  // The message that contains the work request.
+  messageId String?
+
+  // Discord channel where the work is being handled.
+  channelId String
+
+  type   String /// @type 'PVM' | 'Skills' | 'Quests' | 'FireCape' | 'InfernalCape'
+  status String /// @type 'Open' | 'InProgress' | 'Closed' | 'Finished' | 'Claimed'
+  reason String
+
+  price       Int?
+  isCompleted Boolean @default(false)
+}

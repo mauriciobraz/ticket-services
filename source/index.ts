@@ -4,6 +4,8 @@ import 'reflect-metadata';
 import { readdir } from 'fs/promises';
 import { resolve } from 'path';
 
+import { PrismaClient } from '@prisma/client';
+import { GatewayIntentBits } from 'discord.js';
 import { Client, DIService, typeDiDependencyRegistryEngine } from 'discordx';
 import { Logger } from 'tslog';
 import Container, { Service } from 'typedi';
@@ -13,22 +15,35 @@ import { DISCORD_TOKEN, LOG_LEVEL, NODE_ENV } from '@/schemas/dotenv';
 async function main() {
   const logger = new Logger({
     name: 'Main',
-    prettyLogTemplate: '{{dateIsoStr}} {{logLevelName}}',
+    prettyLogTemplate: '{{dateIsoStr}} {{logLevelName}} ',
     minLevel: LOG_LEVEL,
   });
 
   Container.set(Logger, logger);
 
+  await startPrismaClient();
   await startDiscordClient();
 }
 
 const MODULES_PATH = resolve(__dirname, 'modules');
 
+async function startPrismaClient() {
+  const client = new PrismaClient();
+  await client.$connect();
+
+  Container.set(PrismaClient, client);
+}
+
 /** @internal Initialize the client and login to Discord. */
 async function startDiscordClient() {
   const client = new Client({
     botGuilds: NODE_ENV === 'DEVELOPMENT' ? [getAllGuildsId] : undefined,
-    intents: [],
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
   });
 
   await loadModules(MODULES_PATH);
