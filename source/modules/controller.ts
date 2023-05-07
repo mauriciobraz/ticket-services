@@ -1,7 +1,7 @@
 import { Discord, On } from 'discordx';
 import { Logger } from 'tslog';
 
-import type { Interaction, Message } from 'discord.js';
+import type { Interaction } from 'discord.js';
 import type { ArgsOf, Client } from 'discordx';
 
 @Discord()
@@ -10,7 +10,7 @@ class Controller {
 
   @On({ event: 'ready' })
   async onReady(_: ArgsOf<'ready'>, client: Client) {
-    // await client.initApplicationCommands();
+    await client.initApplicationCommands();
 
     this.logger.info(
       'Successfully initialized application commands and started listening for events.'
